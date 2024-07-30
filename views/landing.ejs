@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="#feedback-section">Feedback</a></li>
+            <li><a href="#add-item-section">Add Item</a></li>
+            <li><a href="#delete-item-section">Delete Item</a></li>
+            <li><a href="#items-section">Items</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Welcome!</h1>
+        <p>Please Register as Admin if You Are</p>
+    </header>
+
+    <main>
+        <section id="items-section">
+            <h2>Items</h2>
+            <ul id="items-list"></ul>
+        </section>
+
+        <section id="add-item-section">
+            <h2>Add Item</h2>
+            <form id="add-item-form" method="POST" action="/add-item">
+                <label for="itemname">Item Name:</label>
+                <input type="text" id="itemname" name="itemname" required>
+
+                <label for="itemdescription">Item Description:</label>
+                <textarea id="itemdescription" name="itemdescription" required></textarea>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit">Add Item</button>
+            </form>
+        </section>
+
+        <section id="delete-item-section">
+            <h2>Delete Item</h2>
+            <form id="delete-item-form" method="POST" action="/delete-item">
+                <label for="itemname">Item Name:</label>
+                <input type="text" id="itemname" name="itemname" required>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit">Delete Item</button>
+            </form>
+        </section>
+
+        <section id="feedback-section">
+            <h2>Feedback</h2>
+            <form id="feedback-form" method="POST" action="/submit-feedback">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+       
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Reload the page if it is loaded from the cache
+            if (performance.navigation.type === 2) {
+                location.reload(true);
+            }
+
+            // Fetch and display items
+            fetch('/items')
+                .then(response => response.json())
+                .then(data => {
+                    const itemsList = document.getElementById('items-list');
+                    itemsList.innerHTML = ''; // Clear existing items
+                    data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${item.name}</strong>: ${item.text}`;
+                        itemsList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching items:', error));
+        });
+    </script>
+</body>
+</html>
